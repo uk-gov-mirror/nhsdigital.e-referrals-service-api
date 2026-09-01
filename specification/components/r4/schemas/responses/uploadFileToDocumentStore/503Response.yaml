@@ -1,0 +1,47 @@
+description: |
+  Where status code 503 (Service Unavailable) is returned then an eRS-OperationOutcome-1 will be included in the body, as detailed below.
+  In response to receiving this status code, it is recommended that clients retry at a later time based on a returned `Retry-After` header when provided.
+  
+  | Error code                         | Description                                                                                                                          |
+  | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+  | SYSTEM_UNAVAILABLE                 | A request to an internal component timed out whilst attempting to serve a response or the system is currently otherwise unavailable. |
+headers:
+  X-Correlation-ID:
+    description: |
+      The X-Correlation-ID from the request header, if supplied, mirrored back.
+    required: false
+    schema:
+      type: string
+      example: 11C46F5F-CDEF-4865-94B2-0EE0EDCC26DA
+  X-Request-ID:
+    description: |
+      The e-RS transaction id
+    required: false
+    schema:
+      type: string
+      example: 58621d65-d5ad-4c3a-959f-0438e355990e-1
+  Content-Type:
+    description: |
+      Indicates the media type of the associated resource.
+    required: true
+    schema:
+      type: string
+      enum:
+        - application/fhir+json
+      example: application/fhir+json
+  Retry-After:
+    description: |
+      Defines a period (in seconds) after which the client should attempt their request again.
+    required: false
+    schema:
+      type: string
+      example: '120'
+content:
+  application/fhir+json:
+    schema:
+      $ref: '../../../../stu3/schemas/STU3-OperationOutcome.yaml'
+    example:
+      $ref: '../../../examples/uploadFileToDocumentStore/responses/OperationOutcome-503.json'
+
+
+

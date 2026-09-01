@@ -1,0 +1,63 @@
+description: Response body is a `Binary` resource containing binary id for the file to be uploaded. The file should be uploaded via a PUT to the uri returned in the Location header.
+headers:
+  x-correlation-id:
+    description: |
+      The X-Correlation-ID from the request header, if supplied, mirrored back.
+    required: false
+    schema:
+      type: string
+      example: 11C46F5F-CDEF-4865-94B2-0EE0EDCC26DA
+  x-request-id:
+    description: |
+      The e-RS transaction id
+    required: false
+    schema:
+      type: string
+      example: 58621d65-d5ad-4c3a-959f-0438e355990e-1
+  Location:
+    description: Location in the object store where the file should be uploaded to
+    required: true
+    schema:
+      type: string
+      format: uri
+      example: https://s3.amazonaws.com/nhs-example-bucket/patientfile.txt?X-Amz-Algorithm=AWS4-HMAC...
+content:
+  application/fhir+json:
+    schema:
+      title: Binary resource
+      description: A FHIR Binary resource containing document data.
+      type: object
+      required:
+        - resourceType
+        - contentType
+      properties:
+        resourceType:
+          type: string
+          enum:
+            - Binary
+          example: Binary
+        identifier:
+          type: array
+          items:
+            type: object
+            required:
+              - system
+              - value
+            properties:
+              system:
+                type: string
+                enum:
+                  - https://fhir.nhs.uk/Id/ers-binary-id
+                example: https://fhir.nhs.uk/Id/ers-binary-id
+              value:
+                type: string
+                example: c5d2d200-7613-4a69-9c5f-1bb68e04b8d8
+        contentType:
+          type: string
+          example: application/pdf
+    examples:
+      example-response-body:
+        summary: Example response body
+        value:
+          $ref: '../../../examples/uploadFileToDocumentStore/responses/BinaryResource.json'
+

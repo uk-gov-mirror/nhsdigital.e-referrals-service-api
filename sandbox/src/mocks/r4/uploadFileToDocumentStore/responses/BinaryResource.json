@@ -1,0 +1,11 @@
+{
+  "resourceType": "Binary",
+  "identifier": [
+    {
+      "system": "https://fhir.nhs.uk/Id/ers-binary-id",
+      "value": "c5d2d200-7613-4a69-9c5f-1bb68e04b8d8"
+    }
+  ],
+  "contentType": "application/pdf"
+}
+

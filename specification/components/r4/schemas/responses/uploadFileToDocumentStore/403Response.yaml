@@ -1,0 +1,41 @@
+description: |
+  Where status code 403 (Forbidden) is returned then an eRS-OperationOutcome-1 will be included in the body, as detailed below.
+  Check diagnostics property for specific information regarding the error.
+  
+  | issue.details.coding.code | issue.code | Coding System                                                      | Description                                                                        |
+  | ------------------------- | ---------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+  | FORBIDDEN                 | forbidden  | [eRS Error Code](https://fhir.nhs.uk/CodeSystem/ers-error-codes)   | A call attempts to access or operate upon a resource without proper authorisation. |
+  | NO_ACCESS                 | forbidden  | [eRS Error Code](https://fhir.nhs.uk/CodeSystem/ers-error-codes)   | The request could not be authenticated due to insufficient credentials being provided. |
+headers:
+  X-Correlation-ID:
+    description: |
+      The X-Correlation-ID from the request header, if supplied, mirrored back.
+    required: false
+    schema:
+      type: string
+      example: 11C46F5F-CDEF-4865-94B2-0EE0EDCC26DA
+  X-Request-ID:
+    description: |
+      The e-RS transaction id
+    required: false
+    schema:
+      type: string
+      example: 58621d65-d5ad-4c3a-959f-0438e355990e-1
+  Content-Type:
+    description: |
+      Indicates the media type of the associated resource.
+    required: true
+    schema:
+      type: string
+      enum:
+        - application/fhir+json
+      example: application/fhir+json
+content:
+  application/fhir+json:
+    schema:
+      $ref: '../../../../stu3/schemas/STU3-OperationOutcome.yaml'
+    example:
+      $ref: '../../../examples/uploadFileToDocumentStore/responses/OperationOutcome-403.json'
+
+
+
