@@ -1,0 +1,42 @@
+const mockResponseProvider = require('./services/mockResponseProvider')
+const validationUtils = require('../common/validationUtils')
+
+module.exports = [
+  /**
+   * Sandbox implementation for uploadFileToDocumentStore A039 (R4) endpoint
+   */
+  {
+    method: 'POST',
+    path: '/FHIR/R4/Binary',
+    config: {
+      payload: {
+        maxBytes: 5242880, // 5MB
+        parse: false,
+        // Supported file types align with A039 documentation.
+        allow: ['text/plain', 'application/pdf', 'text/xml', 'text/rtf',
+          'audio/basic', 'audio/mpeg', 'image/png', 'image/gif', 'image/jpeg',
+          'image/tiff', 'video/mpeg', 'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/dicom']
+      }
+    },
+    handler: (request, h) => {
+      const allowedBusinessFunctions = ['REFERRING_CLINICIAN', 'REFERRING_CLINICIAN_ADMIN', 'SERVICE_PROVIDER_CLINICIAN', 'SERVICE_PROVIDER_CLINICIAN_ADMIN']
+
+      const validationResult = validationUtils.validateBusinessFunction(request, h, allowedBusinessFunctions)
+      if (validationResult) {
+        return validationResult
+      }
+
+      const exampleResponse = mockResponseProvider.getExampleResponseForUploadFileToDocumentStore(request)
+      if (exampleResponse) {
+        const { responsePath, responseCode, location } = exampleResponse
+        const response = h.file(responsePath, { etagMethod: false }).code(responseCode).type('application/fhir+json')
+        response.headers.Location = location
+        return response
+      }
+
+      return h.file('r4/uploadFileToDocumentStore/responses/OperationOutcome-422.json').code(422).type('application/fhir+json')
+    }
+  }
+]
+
