@@ -74,10 +74,12 @@ module.exports = {
     const hasPayload = request.payload && request.payload.length !== 0
 
     if (hasPayload && filename && fileSize && fileMimeType) {
+      const encodedFilename = encodeURIComponent(filename)
       return {
         responsePath: 'r4/uploadFileToDocumentStore/responses/BinaryResource.json',
         responseCode: 200,
-        location: 'Binary/19eb7224-dff3-4730-a5cb-67eac811f1a5'
+        location: 'Binary/19eb7224-dff3-4730-a5cb-67eac811f1a5',
+        contentDisposition: `attachment; filename="${filename}"; filename*=UTF-8''${encodedFilename}`
       }
     }
 

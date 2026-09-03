@@ -29,10 +29,12 @@ module.exports = [
 
       const exampleResponse = mockResponseProvider.getExampleResponseForUploadFileToDocumentStore(request)
       if (exampleResponse) {
-        const { responsePath, responseCode, location } = exampleResponse
-        const response = h.file(responsePath, { etagMethod: false }).code(responseCode).type('application/fhir+json')
-        response.headers.Location = location
-        return response
+        const { responsePath, responseCode, location, contentDisposition } = exampleResponse
+        return h.file(responsePath, { etagMethod: false })
+          .code(responseCode)
+          .type('application/fhir+json')
+          .header('Location', location)
+          .header('Content-Disposition', contentDisposition)
       }
 
       return h.file('r4/uploadFileToDocumentStore/responses/OperationOutcome-422.json').code(422).type('application/fhir+json')

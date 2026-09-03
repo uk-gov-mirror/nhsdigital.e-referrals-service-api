@@ -123,5 +123,6 @@ class TestUploadAttachmentR4(SandboxTest):
             actual_response,
             additional={
                 "Location": "Binary/19eb7224-dff3-4730-a5cb-67eac811f1a5",
+                "Content-Disposition": "attachment; filename=\"upload.txt\"; filename*=UTF-8''upload.txt",
             },
         )
