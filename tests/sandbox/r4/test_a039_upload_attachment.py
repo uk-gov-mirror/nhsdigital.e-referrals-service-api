@@ -126,3 +126,41 @@ class TestUploadAttachmentR4(SandboxTest):
                 "Content-Disposition": "attachment; filename=\"upload.txt\"; filename*=UTF-8''upload.txt",
             },
         )
+
+    @pytest.mark.parametrize("actor", authorised_actor_data)
+    def test_success_without_payload(
+        self,
+        send_rest_request: Callable[[HttpMethod, str, Actor], Response],
+        load_json: Callable[[str], Dict[str, str]],
+        endpoint_url: str,
+        http_method: HttpMethod,
+        actor: Actor,
+    ):
+        headers = {
+            RenamedHeader.FILENAME.original: "upload.txt",
+            RenamedHeader.REFERRAL_ID.original: "000000070000",
+            "nhsd-ers-file-size": "128",
+            "nhsd-ers-file-mime-type": "text/plain",
+            "content-type": "text/plain",
+        }
+
+        actual_response = send_rest_request(
+            http_method,
+            endpoint_url,
+            actor,
+            headers=headers,
+        )
+
+        expected_response = load_json(
+            "r4/uploadFileToDocumentStore/responses/BinaryResource.json"
+        )
+
+        asserts.assert_status_code(200, actual_response.status_code)
+        asserts.assert_response(expected_response, actual_response)
+        asserts.assert_json_response_headers(
+            actual_response,
+            additional={
+                "Location": "Binary/19eb7224-dff3-4730-a5cb-67eac811f1a5",
+                "Content-Disposition": "attachment; filename=\"upload.txt\"; filename*=UTF-8''upload.txt",
+            },
+        )

@@ -71,9 +71,8 @@ module.exports = {
     const filename = request.headers['nhsd-ers-file-name']
     const fileSize = request.headers['nhsd-ers-file-size']
     const fileMimeType = request.headers['nhsd-ers-file-mime-type']
-    const hasPayload = request.payload && request.payload.length !== 0
 
-    if (hasPayload && filename && fileSize && fileMimeType) {
+    if (filename && fileSize && fileMimeType) {
       const encodedFilename = encodeURIComponent(filename)
       return {
         responsePath: 'r4/uploadFileToDocumentStore/responses/BinaryResource.json',
