@@ -66,6 +66,11 @@ description: |
     - do not cache the temporary location
     - do not attempt to re-use the temporary location
     - supply a file size header (when calling A039) that EXACTLY matches the size of the file uploaded
+
+  When performing the PUT operation the following headers are required:
+   - `Content-Type` - this should be the same value that was provided in the `NHSD-eRS-File-MIME-Type` header when calling A039
+   - `Content-Disposition` - this should contain the value returned in the `Content-Disposition` header of the A039 response
+   - `Content-Length` - this should be the exact length of the file in bytes and must be the same as the value provided in the `NHSD-eRS-File-Size header` when calling A039.
   
   See the Response HTTP 200 section for further information.
   

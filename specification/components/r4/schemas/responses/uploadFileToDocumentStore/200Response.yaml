@@ -21,6 +21,13 @@ headers:
       type: string
       format: uri
       example: https://s3.amazonaws.com/nhs-example-bucket/patientfile.txt?X-Amz-Algorithm=AWS4-HMAC...
+  Content-Disposition:
+    description: |
+      Content-Disposition to be supplied in the PUT operation when uploading the file
+    required: true
+    schema:
+      type: string
+      example: attachment; filename=''?UTF-8?Qfilename.txt?'';filename*=UTF-8''filename.txt
 content:
   application/fhir+json:
     schema:
